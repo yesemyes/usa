@@ -2,8 +2,8 @@ jQuery(document).ready(function($)
 {
 	function getDayDelta(leadDate, paymenDate)
     {
-        var leadDate = new Date(leadDate[0],leadDate[1]-1,leadDate[2]),
-        paymenDate = new Date(paymenDate[0], paymenDate[1]-1, paymenDate[2]), delta;
+        var leadDate = new Date(leadDate[1],leadDate[0]-1,leadDate[2]),
+        paymenDate = new Date(paymenDate[1], paymenDate[0]-1, paymenDate[2]), delta;
         paymenDate.setHours(0);
         paymenDate.setMinutes(0);
         paymenDate.setSeconds(0);
@@ -12,7 +12,7 @@ jQuery(document).ready(function($)
         return Math.round(delta / 1000 / 60 / 60/ 24);
     }
 
-	$(function () {$('.datetimepicker').datetimepicker({format: 'DD-MM-YYYY'});});
+	$(function () {$('.datetimepicker').datetimepicker({format: 'MM/DD/YYYY'});});
 
 	$(document).on("blur",".datetimepicker",function()
     {
@@ -20,9 +20,9 @@ jQuery(document).ready(function($)
     	var lead_date = $(dataPickers[0]).val();
     	var payment_date = $(dataPickers[1]).val();
     	if( lead_date != "" && payment_date != "" ){
-	    	var arr_lead = lead_date.split('-');
-	    	var arr_payment = payment_date.split('-');
-	    	var age_val = getDayDelta( [ arr_payment[2],arr_payment[1],arr_payment[0] ], [ arr_lead[2],arr_lead[1],arr_lead[0] ] );
+	    	var arr_lead = lead_date.split('/');
+	    	var arr_payment = payment_date.split('/');
+	    	var age_val = getDayDelta( [ arr_payment[2],arr_payment[0],arr_payment[1] ], [ arr_lead[2],arr_lead[0],arr_lead[1] ] );
 	    	var age = $(this).parents('.tablerow').find('.age').val(age_val);
     	}
     });
@@ -60,7 +60,7 @@ jQuery(document).ready(function($)
     		else var second_amount_due = '';
     		
 			$("#cont").append('<div class="row tablerow"><input type="hidden" name="tID[]" value="0"><div class="col-md-1"><div class="form-group"><a class="btn btn-success form-control add"><i class="fa fa-plus"></i></a></div></div><div class="col-md-2"><div class="form-group"><div class="input-group date datetimepicker"><input type="text" name="lead_date[]" class="form-control" required /><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span></div></div></div><div class="col-md-2"><div class="form-group"><div class="input-group date datetimepicker"><input type="text" name="payment_date[]" class="form-control" required /><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span></div></div></div><div class="col-md-1"><div class="form-group"><input type="text" name="age[]" readonly required class="form-control age" /></div></div><div class="col-md-2"><div class="form-group"><select name="payment_method_id[]" class="form-control pay" required></select><div class="input-group date return_check none"><input type="text" name="check_price[]" class="form-control amCol" placeholder="Check (m or i)"/><span class="input-group-addon"><i class="fa fa-usd"></i><input type="checkbox" class="" name="check[]"/></span></div></div></div><div class="col-md-2"><div class="form-group"><select name="payment_type_id[]" class="form-control pay_type" required></select></div></div><div class="col-md-2"><div class="form-group"><select name="worker_id[]" class="form-control worker" required></select></div></div><div class="col-md-2"><div class="form-group"><div class="input-group date"><input type="text" name="amounts_due[]" class="form-control amount_due" value="'+second_amount_due+'" required><span class="input-group-addon"><input type="checkbox" class="payed" name="payed[]"></span></div></div></div></div>');
-			$('.datetimepicker').datetimepicker({format: 'DD-MM-YYYY'});
+			$('.datetimepicker').datetimepicker({format: 'MM/DD/YYYY'});
 	    	
 			$(this).parents('.tablerow').next().find('.pay').html(this_select_pay);
 			$(this).parents('.tablerow').next().find('.pay_type').html(this_select_pay_type);
@@ -124,4 +124,4 @@ jQuery(document).ready(function($)
 	    });
     });
 
-});
+}); // end ready()

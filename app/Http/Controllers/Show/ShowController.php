@@ -22,7 +22,7 @@ class ShowController extends Controller
 
 	public function dashboard()
 	{
-		$end = date("Y-m-d", strtotime(date('d-m-Y')));
+		$end = date("Y-m-d");
 		// success
 		$total_amout = Transaction_detalis::select(DB::raw("SUM(amounts_due) as amounts_due"))
 		                                  ->where('payed',1)
@@ -49,7 +49,6 @@ class ShowController extends Controller
 		                                            ->groupBy('worker_id')
 			                                         ->get();
 
-
 		$a = 0;
 		$ab = 0;
 		$new_bissness = [];
@@ -67,22 +66,18 @@ class ShowController extends Controller
 			if($val->payment_type_id==1 || $val->payment_type_id==4)
 			{
 				$ab = $ab+1;
-
 				if($a != $val->worker_id){
 					$new_deal["{$val->worker_id}"] = 1;
 					$a = $val->worker_id;
-
 				}
 				else {
 					$new_deal["{$val->worker_id}"] += 1;
 				}
-
 			}
 
 			if($val->payment_type_id == 6 || $val->payment_type_id == 7 || $val->payment_type_id == 11)
 			{
 				$ab = $ab+0.5;
-
 				if($a != $val->worker_id){
 					$new_deal["{$val->worker_id}"] = 0.5;
 					$a = $val->worker_id;
@@ -90,13 +85,13 @@ class ShowController extends Controller
 				else {
 					$new_deal["{$val->worker_id}"] += 0.5;
 				}
-
 			}
 			// end new deal
 
 			$new_deal['total_new'] = $ab;
 		} // end foreach
-		return view('dashboard', compact('new_deal','new_bissness_total','new_bissness','total_amout','result_worker'));
+		$current_date = date('m/d/Y');
+		return view('dashboard', compact('current_date','new_deal','new_bissness_total','new_bissness','total_amout','result_worker'));
 	}
 
 	public function workers()
@@ -140,7 +135,7 @@ class ShowController extends Controller
 		$payment_methods    = Payment_method::get();
 		$payment_types      = Payment_type::get();
 		$workers            = Worker::get();
-		return view('create.transaction', ['marketing_sources' => $marketing_sources, 'payment_methods' => $payment_methods, 'payment_types' => $payment_types, 'workers' => $workers]);
+		return view('create.transaction', compact('marketing_sources','payment_methods','payment_types','workers'));
 	}
 
 	public function transactions()
@@ -168,14 +163,14 @@ class ShowController extends Controller
 		$amounts_sum = [];
 		$amounts_due = 0;
 		foreach($detalis as $item){
-			$leadDate = date("d-m-Y", strtotime($item->lead_date));
-			$paymentDate = date("d-m-Y", strtotime($item->payment_date));
+			$leadDate = date("m-d-Y", strtotime($item->lead_date));
+			$paymentDate = date("m-d-Y", strtotime($item->payment_date));
 			array_push($lead_date, $leadDate);
 			array_push($payment_date, $paymentDate);
 			$amounts_due += $item->amounts_due;
 			array_push($amounts_sum, $amounts_due);
 		}
-		return view('show.transaction',['transaction'=>$transaction,'detalis'=>$detalis,'workers'=>$workers,'marketing_sources'=>$marketing_sources,'payment_methods'=>$payment_methods,'payment_types'=>$payment_types,'lead_date'=>$lead_date,'payment_date'=>$payment_date,'amounts_due'=>$amounts_due]);
+		return view('show.transaction', compact('transaction','detalis','workers','marketing_sources','payment_methods','payment_types','lead_date','payment_date','amounts_due'));
 	}
 
 	public function search(Request $request)
@@ -265,7 +260,6 @@ class ShowController extends Controller
 	public function getWorkingDays($startDate,$endDate){
 		$endDate = strtotime($endDate);
 		$startDate = strtotime($startDate);
-
 		$days = ($endDate - $startDate) / 86400 + 1;
 
 		$no_full_weeks = floor($days / 7);
@@ -309,7 +303,7 @@ class ShowController extends Controller
 
 	public function report(Request $request)
 	{
-		$now = date('d-m-Y');
+		$now = date('m/d/Y');
 		if( isset($request->start_date) && $request->start_date!=null ) $start_date = $request->start_date;
 		else $start_date = $now;
 		if( isset($request->end_date) && $request->end_date!=null ) $end_date = $request->end_date;
@@ -319,7 +313,7 @@ class ShowController extends Controller
 		$results = null;
 		if( $start_date != null )
 		{
-			$start = date("Y-m-d", strtotime($start_date));
+			$start = date("Y-m-d",strtotime($start_date));
 			$end = date("Y-m-d", strtotime($end_date));
 
 			// success
@@ -422,7 +416,7 @@ class ShowController extends Controller
 			header("Content-Disposition: attachment; filename=download.xls");
 			return view('create.saler-report', compact('new_deal','new_bissness_total','new_bissness','total_amout','workingDays','result_payment_method','result_payment_type','result_worker','result_marketing','end_date','start_date'));
 		}
-		return view('show.report',            compact('new_deal','new_bissness_total','new_bissness','total_amout','workingDays','result_payment_method','result_payment_type','result_worker','result_marketing','end_date','start_date'));
+		return view('show.report', compact('new_deal','new_bissness_total','new_bissness','total_amout','workingDays','result_payment_method','result_payment_type','result_worker','result_marketing','end_date','start_date'));
 	}
 
 }

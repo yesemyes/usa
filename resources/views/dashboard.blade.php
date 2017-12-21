@@ -13,12 +13,7 @@
                 <div class="panel-body">
                     @if(isset($new_deal) && count($new_deal)>0)
                         <div class="table-responsive">
-                            <h2 class="tCenter" id="current-date">
-                                <?php
-	                            $myDate = date('m.d.Y');
-	                            echo $myDate;
-                               ?>
-                            </h2>
+                            <h2 class="tCenter" id="current-date">{{$current_date}}</h2>
                             <table class="table table-bordered table-hover">
                                 <thead>
                                 <tr>
