@@ -24,6 +24,8 @@ ul{
 }
 .w100{width: 100%;}
 .mt5{margin-top: 5px;}
+.mb10{margin-bottom: 10px;}
+.mt10{margin-top: 10px;}
 .mt25{margin-top: 25px;}
 
 .amounts_sum{
@@ -143,4 +145,13 @@ ul{
 }
 .col-md-1 {
 	width: 7.142857142857143%;
+}
+
+.collapse.in {
+	display: table;
+}
+.hidden_select{
+	position: absolute;
+	width: 90%;
+	height: 35px;
 }

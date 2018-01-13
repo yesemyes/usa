@@ -30,13 +30,13 @@
                 <div class="panel-heading">Create New Transaction</div>
 
                 <div class="panel-body">
-                    <form action="{{ url('/createTransaction') }}" method="POST">
+                    <form action="{{ url('/createTransaction') }}" id="transaction" method="POST">
 		                {{ csrf_field() }}
                         <div class="row">
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="case_id">Case ID #</label>
-                                    <input type="text" id="case_id" class="form-control" required="required" name="case_id" placeholder="Case ID #">
+                                    <input type="text" id="case_id" data-case-id="" class="form-control" required="required" name="case_id" placeholder="Case ID #">
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -48,7 +48,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="client_name">Marketing Source</label>
-                                    <select name="marketing_source_id" class="form-control" required>
+                                    <select name="marketing_source_id" id="marketing_source_id" class="form-control" required>
                                         <option value="">Choose</option>
                                         @foreach($marketing_sources as $item)
                                         <option value="{{$item->id}}">{{$item->title}}</option>
@@ -159,11 +159,10 @@
                         </div>
 
 		                <div class="form-group">
-		                    <input type="submit" value="Create" class="form-control">
+		                    <input type="submit" id="create-button" value="Create" class="form-control">
 		                </div>
 		            </form>
                 </div>
-
             </div>
         </div>
     </div>

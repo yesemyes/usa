@@ -21,7 +21,7 @@ Route::get('/create-marketing-source', function() {return view('create.marketing
 
 Auth::routes();
 /* HomeController */
-Route::get('/dashboard', 'Show\ShowController@dashboard');
+Route::get('/dashboard', 'HomeController@dashboard');
 /* ShowController */
 Route::get('/search', 'Show\ShowController@search');
 Route::post('/search', 'Show\ShowController@search');
@@ -49,3 +49,7 @@ Route::post('/createTransaction', 'Create\CreateController@createTransactionActi
 /* DeleteController */
 Route::post('/deleteWorker/{id}', 'Delete\DeleteController@worker');
 Route::post('/deleteTrDetalis/{id}', 'Delete\DeleteController@transaction_detalis');
+Route::post('/deleteTransaction', 'Delete\DeleteController@transaction');
+/* Check */
+Route::post('/checkCaseId','Show\ShowController@checkCase');
+Route::post('/checkSelects','Show\ShowController@checkSelects');

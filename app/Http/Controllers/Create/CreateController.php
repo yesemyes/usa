@@ -107,13 +107,17 @@ class CreateController extends Controller
             $amounts_total += $request->amounts_due[$key];
         }
 
-        if( $checkCollected->total_price == $amounts_total ){
-            Transaction::where('id',$transaction_id)->update(['collected'=>1]);
-            Session::flash('message_success', 'Collected');
-        }elseif( $checkCollected->total_price > $amounts_total ){
-            Transaction::where('id',$transaction_id)->update(['collected'=>0]);
-        }else{
-            Session::flash('message_success', ' Error');
-        }return redirect('/manage-transaction/'.$transaction_id);
+	    if( $checkCollected['total_price'] == $amounts_total ){
+		    Transaction::where('id',$transaction_id)->update(['collected'=>1]);
+		    Session::flash('message_success', 'Collected');
+	    }elseif( $checkCollected['total_price'] > $amounts_total ){
+		    Transaction::where('id',$transaction_id)->update(['collected'=>0]);
+		    Session::flash('message_error', 'Gross Sale > Amount Due');
+	    }elseif( $checkCollected['total_price'] < $amounts_total ){
+		    Transaction::where('id',$transaction_id)->update(['collected'=>0]);
+		    Session::flash('message_error', 'Gross Sale < Amount Due');
+	    }else{
+		    Session::flash('message_error', 'Error!');
+	    }return redirect('/manage-transaction/'.$transaction_id);
     }
 }

@@ -25,7 +25,7 @@
         </div>
     @endif
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-14">
         <div class="panel panel-default">
             <div class="panel-heading">All Transactions</div>
 
@@ -38,9 +38,9 @@
                                 <th>Case ID</th>
                                 <th>Client Name</th>
                                 <th>Marketing Source</th>
-                                <th>($)Total Price</th>
+                                <th>($) Gross Sale</th>
                                 <th>Created at</th>
-                                <th>Action</th>
+                                <th class="tCenter">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -52,7 +52,10 @@
                                     <td>{{ $item->title }}</td>
                                     <td>$ {{ $item->total_price }}</td>
                                     <td>{{ $item->created_at }}</td>
-                                    <td><a href="{{ url('/manage-transaction/'.$item->id) }}" class="dBlock btn btn-info">Edit</a></td>
+                                    <td class="tCenter">
+                                        <a href="{{ url('/manage-transaction/'.$item->id) }}" class="btn btn-info">Edit</a>
+                                        <a href="#" data-id="{{$item->id}}" class="del_tr btn btn-danger">Delete</a>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -68,4 +71,5 @@
 @section('myjsfile')
 <script src="{{ url('bower_components/bootstrap/dist/js/moment.min.js') }}"></script>
 <script src="{{ url('bower_components/bootstrap/dist/js/bootstrap-datetimepicker.min.js') }}"></script>
+<script src="{{ url('dist/js/transaction.js') }}"></script>
 @endsection

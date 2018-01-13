@@ -78,15 +78,15 @@
                                         <tr>
                                             <td>@if( isset($item->first_name) ) {{$item->first_name}} {{$item->last_name}} @endif</td>
                                             <td>@if( isset($item->amounts_due) ) ${{number_format($item->amounts_due,2)}} @else $0,00 @endif</td>
-                                            <td>@if( isset($new_bissness[$key]) ) ${{number_format($new_bissness[$key],2)}} @else $0,00 @endif</td>
-                                            <td style="text-align: center;">@if( isset($new_deal[$item->w_id]) ) {{str_replace("."," , ",$new_deal[$item->w_id])}} @else 0 @endif</td>
+                                            <td>@if( isset($new_bissness[$item->w_id]) ) ${{number_format($new_bissness[$item->w_id],2)}} @else $0,00 @endif</td>
+                                            <td style="text-align: center;">@if( isset($new_deal[$item->w_id]) ) {{$new_deal[$item->w_id]}} @else 0 @endif</td>
                                         </tr>
                                     @endforeach
                                     <tr>
                                         <td><b>Total</b></td>
                                         <td><b>@if($total_amout[0]->amounts_due>0) ${{number_format($total_amout[0]->amounts_due,2)}} @else $0,00 @endif</b></td>
                                         <td>@if($new_bissness_total['total_all']>0) ${{number_format($new_bissness_total['total_all'],2)}} @else $0,00 @endif</td>
-                                        <td style="text-align: center;">@if($new_deal['total_new']>0) {{str_replace("."," , ",$new_deal['total_new'])}} @else 0 @endif</td>
+                                        <td style="text-align: center;">@if($new_deal['total_new']>0) {{$new_deal['total_new']}} @else 0 @endif</td>
                                     </tr>
                                     <tr>
                                         <td></td>

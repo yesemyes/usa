@@ -38,4 +38,18 @@ class DeleteController extends Controller
         if($trDetalis == 1) return "ok";
         else return "error";
     }
+
+    public function transaction(Request $request)
+    {
+	    $trDetalis = Transaction_detalis::where('transaction_id',$request->id)->delete();
+	    $transaction = Transaction::where('id',$request->id)->delete();
+	    if($transaction == 1) return "ok";
+	    else return "error";
+	    /*if($trDetalis == 1){
+		    $transaction = Transaction::where('id',$request->id)->delete();
+		    if($transaction == 1) return "ok";
+		    else return "error";
+	    }else return "error";*/
+
+    }
 }

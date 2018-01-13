@@ -57,6 +57,7 @@
 
     <ul class="nav navbar-top-links navbar-right">
         <li><a href="{{ url('/dashboard') }}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+        <li><a href="{{ url('/create-transaction') }}">Transaction</a></li>
 
         <li><a href="{{ url('/report') }}"><i class="fa fa-line-chart" aria-hidden="true"></i> Report</a></li>
 
@@ -68,7 +69,6 @@
                     <a href="{{ url('/create-payment-method') }}">Payment method</a>
                     <a href="{{ url('/create-payment-type') }}">Payment type</a>
                     <a href="{{ url('/create-marketing-source') }}">Marketing Source</a>
-                    <a href="{{ url('/create-transaction') }}">Transaction</a>
                 </div>
             </div>
         </li>

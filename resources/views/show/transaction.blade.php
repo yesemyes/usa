@@ -30,13 +30,13 @@
             <div class="panel-heading">{{$transaction['case_id']}} Transaction</div>
 
             <div class="panel-body">
-                <form action="{{ url('/updateTransaction/'.$transaction['id']) }}" method="POST">
+                <form action="{{ url('/updateTransaction/'.$transaction['id']) }}" id="transaction" method="POST">
                     {{ csrf_field() }}
                     <div class="row">
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="case_id">Case ID #</label>
-                                <input type="text" id="case_id" value="{{$transaction['case_id']}}" class="form-control" required="required" name="case_id" placeholder="Case ID #">
+                                <input type="text" id="case_id" data-case-id="{{$transaction['case_id']}}" value="{{$transaction['case_id']}}" class="form-control" required="required" name="case_id" placeholder="Case ID #">
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -48,7 +48,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="client_name">Marketing Source</label>
-                                <select name="marketing_source_id" class="form-control" required>
+                                <select name="marketing_source_id" id="marketing_source_id" class="form-control" required>
                                 @foreach($marketing_sources as $item)
                                     @if($item->id == $transaction['marketing_source_id'])
                                         <option value="{{$item->id}}" selected>{{$item->title}}</option>
@@ -123,7 +123,7 @@
                                         <input type="text" name="check_price[]" value="{{$item->check_price}}" class="form-control amCol" placeholder="Check (m or i)" />
                                         <span class="input-group-addon">
                                             <i class="fa fa-usd"></i>
-                                            <input type="checkbox" @if($item->check==1) checked @endif class="" name="check[]" />
+                                            <input type="checkbox" @if($item->check==1) checked @endif class="" name="check[{{$item->tID}}]" />
                                         </span>
                                     </div>
                                 </div>
@@ -162,7 +162,7 @@
                                     <div class="input-group date">
                                         <input type="text" value="{{$item->amounts_due}}" name="amounts_due[]" class="form-control @if($transaction->total_price < $amounts_due) amounts_sum @endif amount_due" required />
                                         <span class="input-group-addon">
-                                            <input type="checkbox" class="payed" name="payed[]" @if($item->payed==1) checked @endif>
+                                            <input type="checkbox" class="payed" name="payed[{{$item->tID}}]" @if($item->payed==1) checked @endif>
                                         </span>
                                     </div>
                                 </div>

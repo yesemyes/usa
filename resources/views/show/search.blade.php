@@ -57,6 +57,15 @@
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
+                                <label for="total_price">Amount due</label>
+                                <div class="input-group date">
+                                    <input type="text" id="amount_due" class="form-control" name="amount_due" value="{{$amount_due}}" placeholder="Amount due">
+                                    <span class="input-group-addon"><i class="fa fa-usd"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
                                 <label for="total_price">Gross Sale</label>
                                 <div class="input-group date">
                                     <input type="text" id="total_price" class="form-control" name="total_price" value="{{$total_price}}" placeholder="Gross Sale">
@@ -69,7 +78,7 @@
                     <div class="row tablerow">
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label>Start Date</label>
+                                <label>Payment Date start</label>
                                 <div class='input-group date datetimepicker'>
                                     <input type='text' name="start_date" id="start_date" value="{{$start_date}}" class="form-control" />
                                     <span class="input-group-addon">
@@ -80,7 +89,7 @@
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label>End Date</label>
+                                <label>Payment Date end</label>
                                 <div class='input-group date datetimepicker'>
                                     <input type='text' name="end_date" id="end_date" value="{{$end_date}}" class="form-control" />
                                     <span class="input-group-addon">
@@ -143,46 +152,73 @@
                     </div>
                 </form>
                 @if(count($results)>0)
-                <div class="panel-heading">Result ({{count($results)}})</div>
                 <form action="{{ url('/search') }}" method="POST">
                     {{ csrf_field() }}
-                    <div class="table-responsive">
-                    <table class="table table-bordered table-hover">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Case ID</th>
-                                <th>Client Name</th>
-                                <th>Marketing Source</th>
-                                <th>Payment Method</th>
-                                <th>Payment Type</th>
-                                <th>Sale Rep</th>
-                                <th>Total Price</th>
-                                <th>Created at</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($results as $item)
-                                <input type="hidden" name="id[]" value="{{$item->id}}">
-                                <tr @if( $item->collected == 1 ) class="success" @else class="warning" @endif>
-                                    <td>{{$item->id}}</td>
-                                    <td>{{$item->case_id}}</td>
-                                    <td>{{$item->client_name}}</td>
-                                    <td>{{$item->msTitle}}</td>
-                                    <td>{{$item->pmTitle}}</td>
-                                    <td>{{$item->ptTitle}}</td>
-                                    <td>{{$item->first_name}} {{$item->last_name}}</td>
-                                    <td>{{$item->total_price}}</td>
-                                    <td>{{$item->created_at}}</td>
-                                    <td><a href="{{ url('/manage-transaction/'.$item->id) }}" class="dBlock btn btn-info">Edit</a></td>
+                    <table class="table table-bordered table-responsive table-hover">
+
+                        @foreach($td_results as $key => $item)
+                            <thead class="mt10 ">
+                                <tr>
+                                    <th>Case ID #</th>
+                                    <th>Client Name</th>
+                                    <th>Marketing Source</th>
+                                    <th>Total Price</th>
+                                    <th class="tCenter">Action</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
+                            </thead>
+                            <tbody class="">
+                                <input type="hidden" name="id[]" value="{{$t_results[$key]->id}}">
+                                <tr @if( $t_results[$key]->collected == 1 ) class="success" @else class="warning" @endif>
+                                    <td>{{$t_results[$key]->case_id}}</td>
+                                    <td>{{$t_results[$key]->client_name}}</td>
+                                    <td>{{$t_results[$key]->mTitle}}</td>
+                                    <td>{{$t_results[$key]->total_price}}</td>
+                                    <td class="tCenter">
+                                        <a href="{{ url('/manage-transaction/'.$t_results[$key]->id) }}" class=" btn btn-warning">Edit</a>
+                                        {{--<a href="#demo{{$t_results[$key]->id}}" data-toggle="collapse" class="btn btn-info">Show detalis</a>--}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6">
+                                        <table {{--id="demo{{$t_results[$key]->id}}"--}} class="collapse-in table table-bordered table-responsive table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Lead Date</th>
+                                                    <th>Payment Date</th>
+                                                    <th>Age</th>
+                                                    <th>Payment Method</th>
+                                                    <th>Payment Type</th>
+                                                    <th>Return Check</th>
+                                                    <th>Sale Rap</th>
+                                                    <th>Amount due</th>
+                                                    <th>Collected (amount)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            @foreach($item as $val)
+                                                <tr>
+                                                    <td>{{date("m-d-Y",strtotime($val->lead_date))}}</td>
+                                                    <td>{{date("m-d-Y",strtotime($val->payment_date))}}</td>
+                                                    <td>{{$val->age}}</td>
+                                                    <td>{{$val->title}}</td>
+                                                    <td>{{$val->ptTitle}}</td>
+                                                    <td>@if($val->check_price != null)${{$val->check_price}} @if($val->check==1) Customer @else House @endif @endif</td>
+                                                    <td>{{$val->first_name}} {{$val->last_name}}</td>
+                                                    <td>{{$val->amounts_due}}</td>
+                                                    <td>@if($val->payed==1) Yes @else No @endif</td>
+                                                </tr>
+                                            @endforeach
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        @endforeach
+
                     </table>
                     {{ $results->links('vendor.pagination.custom') }}
                     <input type="submit" name="exel" value="Download Search">
-                </div>
+
                 </form>
                 @endif
             </div>

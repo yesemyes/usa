@@ -108,27 +108,26 @@ class UpdateController extends Controller
                                 'scheduled_count'       =>  $scheduled_count,
                                 'total_price'           =>  $request->total_price
                             ]);
-        
+
         foreach($request->tID as $key => $item)
         {
             $lead_date = date("Y-m-d", strtotime($request->lead_date[$key]));
             $payment_date = date("Y-m-d", strtotime($request->payment_date[$key]));
-            if( isset($request->payed[$key]) && $request->payed[$key] == "on" ) $payed = 1;
+            if( isset($request->payed[$item]) && $request->payed[$item] == "on" ) $payed = 1;
             else $payed = 0;
-				if($request->payment_method_id[$key] == 14){
-				  if( isset($request->check_price[$key]) && $request->check_price[$key] != "" ){
-				     $check_price = $request->check_price[$key];
-				     if( isset($request->check[$key]) && $request->check[$key] == "on" ) $check = 1;
-				     else $check = 0;
-				  } else{
-				     $check_price = null;
-				     $check = null;
-				  }
+				if($request->payment_method_id[$key] == 14)
+				{
+				   if( isset($request->check_price[$key]) && $request->check_price[$key] != "" )
+					  $check_price = $request->check_price[ $key ];
+				   else $check_price = null;
+					if( isset($request->check[$item]) && $request->check[$item] == "on" ) $check = 1;
+					else $check = 0;
 				}
 				else{
 				  $check_price = null;
 				  $check = null;
 				}
+
             if( isset($item) && $item != 0 ){
                 $updTransaction_detalis = Transaction_detalis::where('id',$request->tID[$key])->update([
                     'lead_date'             =>  $lead_date,
@@ -160,6 +159,7 @@ class UpdateController extends Controller
             }
             
         }
+        //dd('ok');
         $amounts_total = 0;
         $checkCollected = Transaction::where('id',$id)->first();
         $trDCheck = Transaction_detalis::where('transaction_id',$id)->where('payed',1)->get();
@@ -173,8 +173,12 @@ class UpdateController extends Controller
             Session::flash('message_success', 'Collected');
         }elseif( $checkCollected['total_price'] > $amounts_total ){
             Transaction::where('id',$id)->update(['collected'=>0]);
+	        Session::flash('message_error', 'Gross Sale > Amount Due');
+        }elseif( $checkCollected['total_price'] < $amounts_total ){
+	        Transaction::where('id',$id)->update(['collected'=>0]);
+	        Session::flash('message_error', 'Gross Sale < Amount Due');
         }else{
-            Session::flash('message_success', 'Error');
+	        Session::flash('message_error', 'Error!');
         }return redirect()->back();
     }
 }
