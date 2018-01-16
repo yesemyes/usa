@@ -79,9 +79,7 @@
             @endif
 
             <div class="content">
-                <div class="title m-b-md">
-                    Coast One
-                </div>
+                <div class="title m-b-md"><a href="{{ url('/dashboard') }}">Coast One</a></div>
             </div>
         </div>
     </body>

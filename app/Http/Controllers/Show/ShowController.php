@@ -49,14 +49,19 @@ class ShowController extends Controller
 
 	public function paymentMethod()
 	{
-		$payment_methods = Payment_method::where('id','<>',14)->orderBy('title','asc')->get();
+		$payment_methods = Payment_method::where('id','<>',14)->where('id','<>',13)->orderBy('title','asc')->get();
 		if( count($payment_methods) == 0 ) return redirect('/payment-method');
 		else return view('show.payment-methods', ['payment_methods'=>$payment_methods]);
 	}
 
 	public function paymentType()
 	{
-		$payment_types = Payment_type::orderBy('title','asc')->get();
+		$payment_types = Payment_type::where('id','<>',1)
+		                             ->where('id','<>',4)
+		                             ->where('id','<>',6)
+		                             ->where('id','<>',7)
+		                             ->where('id','<>',11)
+		                             ->orderBy('title','asc')->get();
 		if( count($payment_types) == 0 ) return redirect('/payment-type');
 		else return view('show.payment-types', ['payment_types'=>$payment_types]);
 	}
@@ -90,7 +95,7 @@ class ShowController extends Controller
 
 	public function transaction($id)
 	{
-		$workers           = Worker::get();
+		$workers           = Worker::where('working',1)->get();
 		$marketing_sources = Marketing_source::orderBy('title','asc')->get();
 		$payment_methods   = Payment_method::get();
 		$payment_types     = Payment_type::get();
@@ -101,7 +106,10 @@ class ShowController extends Controller
 			                              ->leftJoin('workers', 'workers.id', '=', 'transaction_detalis.worker_id')
 			                              ->leftJoin('payment_methods', 'payment_methods.id', '=', 'transaction_detalis.payment_method_id')
 			                              ->leftJoin('payment_types', 'payment_types.id', '=', 'transaction_detalis.payment_type_id')
-			                              ->where('transaction_detalis.transaction_id',$id)->orderBy('transaction_detalis.id','asc')->get();
+			                              ->where('working',1)
+			                              ->where('transaction_detalis.transaction_id',$id)
+			                              ->orderBy('transaction_detalis.id','asc')
+			                              ->get();
 			$lead_date = [];
 			$payment_date = [];
 			$amounts_sum = [];
@@ -125,7 +133,7 @@ class ShowController extends Controller
 		$marketing_sources  = Marketing_source::orderBy('title','asc')->get();
 		$payment_methods    = Payment_method::orderBy('title','asc')->get();
 		$payment_types      = Payment_type::orderBy('title','asc')->get();
-		$workers            = Worker::orderBy('first_name','asc')->get();
+		$workers            = Worker::where('working',1)->orderBy('first_name','asc')->get();
 		if( isset($request->collected) && $request->collected == "on" ) $collected = "checked";
 		else $collected = null;
 		if( isset($request->case_id) ) $case_id = $request->case_id;
@@ -167,7 +175,8 @@ class ShowController extends Controller
 			                    ->leftJoin('marketing_sources','marketing_sources.id','=','transactions.marketing_source_id')
 			                    ->leftJoin('payment_methods','payment_methods.id','=','transaction_detalis.payment_method_id')
 			                    ->leftJoin('payment_types','payment_types.id','=','transaction_detalis.payment_type_id')
-			                    ->leftJoin('workers','workers.id','=','transaction_detalis.worker_id');
+			                    ->leftJoin('workers','workers.id','=','transaction_detalis.worker_id')
+									  ->where('working',1);
 
 			if($collected!=null)            $query->where('transaction_detalis.payed',1);
 			if($case_id!=null)              $query->where('transactions.case_id',$case_id);
@@ -327,6 +336,8 @@ class ShowController extends Controller
 			                                  ->where('payed',1)
 			                                  ->whereDate('payment_date','>=',$start)
 			                                  ->whereDate('payment_date','<=',$end)
+														 //->where('payment_method_id','<>',13)
+														 //->where('payment_method_id','<>',14)
 			                                  ->get();
 			// success
 			$result_worker = Transaction_detalis::select(DB::raw("SUM(amounts_due) as amounts_due"),
@@ -335,8 +346,11 @@ class ShowController extends Controller
 																					'transaction_detalis.id as td_id')
 			                                    ->leftJoin('workers','workers.id','=','transaction_detalis.worker_id')
 			                                    ->where('payed',1)
+			                                    ->where('working',1)
 			                                    ->whereDate('payment_date','>=',$start)
 			                                    ->whereDate('payment_date','<=',$end)
+															//->where('payment_method_id','<>',13)
+															//->where('payment_method_id','<>',14)
 			                                    ->groupby('worker_id')
 			                                    ->orderBy('worker_id','asc')
 			                                    ->get();
@@ -352,7 +366,6 @@ class ShowController extends Controller
 			                           })
 												->whereDate('payment_date','>=',$start)
 												->whereDate('payment_date','<=',$end)
-			                           //->groupBy('worker_id')
 			                           ->orderBy('worker_id','asc')
 			                           ->get();
 
@@ -366,8 +379,6 @@ class ShowController extends Controller
 			foreach($new_bissness_new_deal as $key => $val)
 			{
 				// new bissness
-				//array_push($new_bissness, $val->amounts);
-				//$new_bissness_total['total_all'] += $val->amounts;
 				if($b != $val->worker_id){
 					$b = $val->worker_id;
 					$new_bissness[$val->worker_id] = $val->amounts_due;
@@ -378,7 +389,7 @@ class ShowController extends Controller
 				// end new bissness
 
 				// new deal
-				if($val->payment_type_id==1 || $val->payment_type_id==4)
+				if($val->amounts_due > 0 && ($val->payment_type_id==1 || $val->payment_type_id==4) )
 				{
 					$ab = $ab+1;
 					if($a != $val->worker_id){
@@ -390,7 +401,7 @@ class ShowController extends Controller
 					}
 				}
 
-				if($val->payment_type_id == 6) // || $val->payment_type_id == 7 || $val->payment_type_id == 11
+				if($val->amounts_due > 0 && $val->payment_type_id == 6) // || $val->payment_type_id == 7 || $val->payment_type_id == 11
 				{
 					$ab = $ab+0.5;
 					if($a != $val->worker_id){

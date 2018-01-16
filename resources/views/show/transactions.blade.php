@@ -53,7 +53,7 @@
                                     <td>$ {{ $item->total_price }}</td>
                                     <td>{{ $item->created_at }}</td>
                                     <td class="tCenter">
-                                        <a href="{{ url('/manage-transaction/'.$item->id) }}" class="btn btn-info">Edit</a>
+                                        <a href="{{ url('/manage-transaction/'.$item->id) }}" target="_blank" class="btn btn-info">Edit</a>
                                         <a href="#" data-id="{{$item->id}}" class="del_tr btn btn-danger">Delete</a>
                                     </td>
                                 </tr>

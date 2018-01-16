@@ -2,7 +2,13 @@
     <thead>
     <tr style="text-align: center;">
         <th colspan="4" style="text-align: center;">
-            <img src="http://test-usa.tk/img/logo.png" alt="logo" width="250" height="75" style="text-align: center;">
+            <table style="text-align:center;" align="center" width="100%">
+                <tr style="text-align:center;" align="center">
+                    <td style="text-align:center;" align="center">
+                        <img src="http://test-usa.tk/img/logo.png" alt="logo" width="250" height="75" style="text-align: center;" align="center">
+                    </td>
+                </tr>
+            </table>
         </th>
     </tr>
     <tr><th></th></tr>

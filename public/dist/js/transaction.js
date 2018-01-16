@@ -169,16 +169,20 @@ jQuery(document).ready(function($)
             var val = parseInt($(this).val());
             new_val += val;
         });
-        /*if(new_val > total_price){
+        if(new_val > total_price){
+        	$(".amount_due").css({'border':"1px solid #cc0000"});
+        	$("#total_price").css({'border':"1px solid #cc0000"});
         	alert("(Amounts due = "+new_val+") > (Gross Sale = "+total_price+")");
             return false;
 		}else if(new_val < total_price){
+            $(".amount_due").css({'border':"1px solid #cc0000"});
+            $("#total_price").css({'border':"1px solid #cc0000"});
             alert("(Amounts due = "+new_val+") < (Gross Sale = "+total_price+")");
             return false;
-		}*/
+		}
         var case_id = $("#case_id").val();
         var data_case_id = $("#case_id").data('case-id');
-        if(data_case_id!='' && data_case_id==case_id){
+        if(data_case_id!='' && data_case_id==case_id && case_id!=''){
             $("#case_id").css({'border':"1px solid #ccc"});
             $("#transaction").submit();
             return true;

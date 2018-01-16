@@ -18,6 +18,7 @@ class HomeController extends Controller
 																'transaction_detalis.id as td_id','payment_method_id')
 		                                    ->leftJoin('workers','workers.id','=','transaction_detalis.worker_id')
 		                                    ->where('payed',1)
+		                                    ->where('working',1)
 		                                    ->whereDate('payment_date',$now_day)
 		                                    ->orderBy('worker_id','asc')
 		                                    ->get();
@@ -47,6 +48,7 @@ class HomeController extends Controller
 																'transaction_detalis.id as td_id','payment_method_id')
 		                                 ->leftJoin('workers','workers.id','=','transaction_detalis.worker_id')
 		                                 ->where('payed',1)
+		                                 ->where('working',1)
 		                                 ->whereDate('payment_date','>=',$first_day)
 		                                 ->whereDate('payment_date','<=',$middle_day)
 		                                 ->orderBy('worker_id','asc')
@@ -77,6 +79,7 @@ class HomeController extends Controller
 																	'transaction_detalis.id as td_id','payment_method_id')
 		                            ->leftJoin('workers','workers.id','=','transaction_detalis.worker_id')
 		                            ->where('payed',1)
+											 ->where('working',1)
 		                            ->whereDate('payment_date','>=',$first_day)
 		                            ->whereDate('payment_date','<=',$last_day)
 		                            ->orderBy('worker_id','asc')
@@ -109,6 +112,7 @@ class HomeController extends Controller
 			'workers.id as w_id','first_name','last_name','transaction_detalis.id as td_id')
 		                            ->leftJoin('workers','workers.id','=','transaction_detalis.worker_id')
 		                                            ->where('payed',1)
+																  ->where('working',1)
 		                                            ->where(function ($query) {
 			                                            $query->orWhere('payment_type_id', 1)
 			                                                  ->orWhere('payment_type_id', 4)

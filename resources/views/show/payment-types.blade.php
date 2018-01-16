@@ -41,10 +41,11 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <input type="text" required="required" name="title" class="form-control" placeholder="Payment type name">
+                            <input type="text" required="required" name="title" class="form-control" placeholder="Payment type name (for delete)">
                         </div>
                         <div class="form-group">
                             <button type="submit" name="change" value="update" class="btn btn-success">Change</button>
+                            <button type="submit" name="destroy" value="delete" class="btn btn-danger">Delete</button>
                         </div>
                     </form>
                 </div>

@@ -50,6 +50,5 @@ class DeleteController extends Controller
 		    if($transaction == 1) return "ok";
 		    else return "error";
 	    }else return "error";*/
-
     }
 }

@@ -23,13 +23,25 @@ class UpdateController extends Controller
     {
         if( $request->working == "on" ) $working = 1;
         else $working = 0;
+	    $updated_tr = '';
+        if($working == 0){
+	        $check_transaction_on_worker = Transaction_detalis::where('worker_id',$id)->get();
+	        if($check_transaction_on_worker!=null){
+		        foreach($check_transaction_on_worker as $item){
+			        $upd_tr_worker = Transaction_detalis::where('id',$item->id)->update([ 'worker_id'=>1]);
+			        if($upd_tr_worker == 1){
+			        	$updated_tr = " and transactions already changed to House";
+			        }
+		        }
+	        }
+        }
     	$updWorker = Worker::where('id',$id)->where('id','<>','1')->update([
             'first_name'=>$request->first_name,
             'last_name' =>$request->last_name,
             'working'   =>$working
         ]);
     	if($updWorker == 1){
-    		Session::flash('message_success', $request->first_name.' '.$request->last_name.' information updated');
+    		Session::flash('message_success', $request->first_name.' '.$request->last_name.' information updated'.$updated_tr);
 			return redirect('/workers');
     	}else{
     		Session::flash('message_error', 'Error!');
@@ -37,7 +49,7 @@ class UpdateController extends Controller
     	}
     }
 
-    /*public function paymentMethod(Request $request)
+    public function paymentMethod(Request $request)
     {
         if ( isset($request->change) && $request->change == "update" ) {
             $updPayment_method = Payment_method::where('id',$request->id)->update(['title'=>$request->title]);
@@ -58,9 +70,9 @@ class UpdateController extends Controller
                 return redirect('/payment-methods');
             }
         } 
-    }*/
+    }
 
-	/*public function paymentType(Request $request)
+	public function paymentType(Request $request)
 	{
 		if ( isset($request->change) && $request->change == "update" ) {
 			$updPayment_type = Payment_type::where('id',$request->id)->update(['title'=>$request->title]);
@@ -71,31 +83,40 @@ class UpdateController extends Controller
 				Session::flash('message_error', $request->title.' NOT UPDATED! Please choose Payment Type');
 				return redirect('/payment-types');
 			}
+		}elseif ( isset($request->destroy) && $request->destroy == "delete" ) {
+			$delPayment_type = Payment_type::where('id',$request->id)->where('title',$request->title)->delete();
+			if($delPayment_type == 1){
+				Session::flash('message_success', $request->title.' deleted');
+				return redirect('/payment-types');
+			}else{
+				Session::flash('message_error', $request->title.' NOT DELETED!, Please select Payment Type and write its name');
+				return redirect('/payment-types');
+			}
 		}
-	}*/
+	}
 
     public function marketingSource(Request $request)
-    {
-        if ( isset($request->change) && $request->change == "update" ) {
-            $updMarketing_sources = Marketing_source::where('id',$request->id)->update(['title'=>$request->title]);
-            if($updMarketing_sources == 1){
-                Session::flash('message_success', $request->title.' Updated');
-                return redirect('/marketing-sources');
-            }else{
-                Session::flash('message_error', $request->title.' NOT UPDATED! Please choose Marketing Source');
-                return redirect('/marketing-sources');
-            }    
-        }elseif ( isset($request->destroy) && $request->destroy == "delete" ) {
-            $delMarketing_sources = Marketing_source::where('id',$request->id)->where('title',$request->title)->delete();
-            if($delMarketing_sources == 1){
-                Session::flash('message_success', $request->title.' Marketing Source deleted');
-                return redirect('/marketing-sources');
-            }else{
-                Session::flash('message_error', $request->title.' NOT DELETED!, Please select Marketing Source and write its name');
-                return redirect('/marketing-sources');
-            }
-        }
-    }
+{
+	if ( isset($request->change) && $request->change == "update" ) {
+		$updMarketing_sources = Marketing_source::where('id',$request->id)->update(['title'=>$request->title]);
+		if($updMarketing_sources == 1){
+			Session::flash('message_success', $request->title.' Updated');
+			return redirect('/marketing-sources');
+		}else{
+			Session::flash('message_error', $request->title.' NOT UPDATED! Please choose Marketing Source');
+			return redirect('/marketing-sources');
+		}
+	}elseif ( isset($request->destroy) && $request->destroy == "delete" ) {
+		$delMarketing_sources = Marketing_source::where('id',$request->id)->where('title',$request->title)->delete();
+		if($delMarketing_sources == 1){
+			Session::flash('message_success', $request->title.' Marketing Source deleted');
+			return redirect('/marketing-sources');
+		}else{
+			Session::flash('message_error', $request->title.' NOT DELETED!, Please select Marketing Source and write its name');
+			return redirect('/marketing-sources');
+		}
+	}
+}
 
     public function transaction($id, Request $request)
     {
@@ -173,10 +194,10 @@ class UpdateController extends Controller
             Session::flash('message_success', 'Collected');
         }elseif( $checkCollected['total_price'] > $amounts_total ){
             Transaction::where('id',$id)->update(['collected'=>0]);
-	        Session::flash('message_error', 'Gross Sale > Amount Due');
+	        Session::flash('message_error', 'Gross Sale > Amount Due (Collected)');
         }elseif( $checkCollected['total_price'] < $amounts_total ){
 	        Transaction::where('id',$id)->update(['collected'=>0]);
-	        Session::flash('message_error', 'Gross Sale < Amount Due');
+	        Session::flash('message_error', 'Gross Sale < Amount Due (Collected)');
         }else{
 	        Session::flash('message_error', 'Error!');
         }return redirect()->back();

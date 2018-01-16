@@ -174,7 +174,7 @@
                                     <td>{{$t_results[$key]->mTitle}}</td>
                                     <td>{{$t_results[$key]->total_price}}</td>
                                     <td class="tCenter">
-                                        <a href="{{ url('/manage-transaction/'.$t_results[$key]->id) }}" class=" btn btn-warning">Edit</a>
+                                        <a href="{{ url('/manage-transaction/'.$t_results[$key]->id) }}" target="_blank" class="btn btn-warning">Edit</a>
                                         {{--<a href="#demo{{$t_results[$key]->id}}" data-toggle="collapse" class="btn btn-info">Show detalis</a>--}}
                                     </td>
                                 </tr>
