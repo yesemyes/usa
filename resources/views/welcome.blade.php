@@ -62,6 +62,33 @@
             .m-b-md {
                 margin-bottom: 30px;
             }
+            .home_link{
+                color: #060606;
+                display: inline-block;
+                padding-bottom: 3px;
+                position: relative;
+                text-decoration: none;
+            }
+            .home_link:hover:after{
+                width: 100%;
+            }
+            .home_link:after{
+                content: '';
+                display: block;
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                margin: auto;
+                height: 1px;
+                width: 0;
+                background: #060606;
+                -webkit-transition: all 0.5s;
+                -moz-transition: all 0.5s;
+                -ms-transition: all 0.5s;
+                -o-transition: all 0.5s;
+                transition: all 0.5s;
+            }
         </style>
     </head>
     <body>
@@ -79,7 +106,7 @@
             @endif
 
             <div class="content">
-                <div class="title m-b-md"><a href="{{ url('/dashboard') }}">Coast One</a></div>
+                <div class="title m-b-md"><a href="{{ url('/dashboard') }}" class="home_link">Coast One</a></div>
             </div>
         </div>
     </body>

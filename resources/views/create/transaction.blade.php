@@ -36,13 +36,13 @@
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="case_id">Case ID #</label>
-                                    <input type="text" id="case_id" data-case-id="" class="form-control" required="required" name="case_id" placeholder="Case ID #">
+                                    <input type="text" id="case_id" data-case-id="" class="form-control" @if( Session::has('case_id') ) value="{{Session::get('case_id')}}" @endif required="required" name="case_id" placeholder="Case ID #">
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="client_name">Client Name</label>
-                                    <input type="text" id="client_name" class="form-control" required="required" name="client_name" placeholder="Jose Isreal Manzano Lopez">
+                                    <input type="text" id="client_name" class="form-control" @if( Session::has('client_name') ) value="{{Session::get('client_name')}}" @endif required="required" name="client_name" placeholder="Jose Isreal Manzano Lopez">
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -60,7 +60,7 @@
                                 <div class="form-group">
                                     <label for="total_price">Gross Sale</label>
                                     <div class="input-group date">
-                                        <input type="text" id="total_price" class="form-control" required="required" name="total_price" placeholder="Gross Sale">
+                                        <input type="text" id="total_price" class="form-control" @if( Session::has('total_price') ) value="{{Session::get('total_price')}}" @endif required="required" name="total_price" placeholder="Gross Sale">
                                         <span class="input-group-addon"><i class="fa fa-usd"></i></span>
                                     </div>
                                 </div>

@@ -110,7 +110,7 @@
                             <div class="col-md-2">
                                 <div class="form-group">
                                     @if($key == 0)<label>Payment Method</label>@endif
-                                    <select name="payment_method_id[]" class="form-control pay" required>
+                                    <select name="payment_method_id[]" class="form-control pay" required="required">
                                         @foreach($payment_methods as $a => $val)
                                             @if($val->id == $item->payment_method_id)
                                                 <option value="{{$val->id}}" selected>{{$val->title}}</option>
@@ -131,7 +131,7 @@
                             <div class="col-md-2">
                                 <div class="form-group">
                                     @if($key == 0)<label>Payment Types</label>@endif
-                                    <select name="payment_type_id[]" class="form-control pay_type" required>
+                                    <select name="payment_type_id[]" class="form-control pay_type" required="required">
                                         @foreach($payment_types as $a => $val)
                                             @if($val->id == $item->payment_type_id)
                                                 <option value="{{$val->id}}" selected>{{$val->title}}</option>
@@ -145,7 +145,7 @@
                             <div class="col-md-2">
                                 <div class="form-group">
                                     @if($key == 0)<label>Sale Rep</label>@endif
-                                    <select name="worker_id[]" class="form-control worker" required>
+                                    <select name="worker_id[]" class="form-control worker" required="required">
                                         @foreach($workers as $a => $val)
                                             @if($val->id == $item->worker_id)
                                                 <option value="{{$val->id}}" selected>{{$val->first_name}} {{$val->last_name}}</option>
@@ -160,7 +160,7 @@
                                 <div class="form-group">
                                     @if($key == 0)<label class="amCol">Amount Due (Collected)</label>@endif
                                     <div class="input-group date">
-                                        <input type="text" value="{{$item->amounts_due}}" name="amounts_due[]" class="form-control @if($transaction->total_price < $amounts_due) amounts_sum @endif amount_due" required />
+                                        <input type="text" value="{{$item->amounts_due}}" name="amounts_due[]" class="form-control" required="required" />
                                         <span class="input-group-addon">
                                             <input type="checkbox" class="payed" name="payed[{{$item->tID}}]" @if($item->payed==1) checked @endif>
                                         </span>

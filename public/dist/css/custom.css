@@ -4,6 +4,7 @@ textarea {
 ul{
     list-style: none;
 }
+
 .mainLogo>img{
 	width: 251px;
 	height: 75px;
@@ -154,4 +155,14 @@ ul{
 	position: absolute;
 	width: 90%;
 	height: 35px;
+}
+.search_download{
+	position: absolute;
+	top: -40px;
+	left: 50%;
+	margin-left: -63px;
+}
+.search_form_result{
+	position: relative;
+	margin-top: 30px;
 }

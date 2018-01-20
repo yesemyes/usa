@@ -28,7 +28,6 @@
     <div class="col-md-14">
         <div class="panel panel-default">
             <div class="panel-heading">Search</div>
-
             <div class="panel-body">
                 <form action="{{ url('/search') }}" autocomplete="off" method="get" id="search_form" role="search">
                     <div class="row">
@@ -152,7 +151,7 @@
                     </div>
                 </form>
                 @if(count($results)>0)
-                <form action="{{ url('/search') }}" method="POST">
+                <form action="{{ url('/search') }}" method="POST" class="search_form_result">
                     {{ csrf_field() }}
                     <table class="table table-bordered table-responsive table-hover">
 
@@ -176,6 +175,7 @@
                                     <td class="tCenter">
                                         <a href="{{ url('/manage-transaction/'.$t_results[$key]->id) }}" target="_blank" class="btn btn-warning">Edit</a>
                                         {{--<a href="#demo{{$t_results[$key]->id}}" data-toggle="collapse" class="btn btn-info">Show detalis</a>--}}
+                                        <a href="#" data-id="{{$t_results[$key]->id}}" class="del_tr_by_search btn btn-danger">Delete</a>
                                     </td>
                                 </tr>
                                 <tr>
@@ -216,10 +216,13 @@
                         @endforeach
 
                     </table>
-                    {{ $results->links('vendor.pagination.custom') }}
-                    <input type="submit" name="exel" value="Download Search">
+                    {{--{{ $results->links('vendor.pagination.custom') }}--}}
+                    <input type="submit" name="exel" value="Download Search" class="search_download">
 
                 </form>
+                @endif
+                @if( isset($_GET['case_id']) && count($results)==0 )
+                    No Result
                 @endif
             </div>
         </div>

@@ -180,26 +180,32 @@ class UpdateController extends Controller
             }
             
         }
-        //dd('ok');
+
         $amounts_total = 0;
         $checkCollected = Transaction::where('id',$id)->first();
         $trDCheck = Transaction_detalis::where('transaction_id',$id)->where('payed',1)->get();
-        
+	     $check_payment_method = [];
         foreach($trDCheck as $key => $val){
+	        if($val->payment_method_id==14 || $val->payment_method_id==13){
+		        $check_payment_method[$val->payment_method_id] = $val->payment_method_id;
+	        }
             $amounts_total += $request->amounts_due[$key];
         }
-
-        if( $checkCollected['total_price'] == $amounts_total ){
-            Transaction::where('id',$id)->update(['collected'=>1]);
-            Session::flash('message_success', 'Collected');
-        }elseif( $checkCollected['total_price'] > $amounts_total ){
-            Transaction::where('id',$id)->update(['collected'=>0]);
-	        Session::flash('message_error', 'Gross Sale > Amount Due (Collected)');
-        }elseif( $checkCollected['total_price'] < $amounts_total ){
-	        Transaction::where('id',$id)->update(['collected'=>0]);
-	        Session::flash('message_error', 'Gross Sale < Amount Due (Collected)');
-        }else{
-	        Session::flash('message_error', 'Error!');
-        }return redirect()->back();
+			if($check_payment_method==null){
+	        if( $checkCollected['total_price'] == $amounts_total ){
+	            Transaction::where('id',$id)->update(['collected'=>1]);
+	            Session::flash('message_success', 'Collected');
+	        }elseif( $checkCollected['total_price'] > $amounts_total ){
+	            Transaction::where('id',$id)->update(['collected'=>0]);
+		        Session::flash('message_error', 'Gross Sale > Amount Due (Collected)');
+	        }elseif( $checkCollected['total_price'] < $amounts_total ){
+		        Transaction::where('id',$id)->update(['collected'=>0]);
+		        Session::flash('message_error', 'Gross Sale < Amount Due (Collected)');
+	        }else{
+		        Session::flash('message_error', 'Error!');
+	        }return redirect()->back();
+			}else{
+				return redirect()->back();
+			}
     }
 }

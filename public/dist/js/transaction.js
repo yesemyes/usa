@@ -31,10 +31,8 @@ jQuery(document).ready(function($)
     $(document).on("change","select[name='payment_method_id[]']",function(){
 		if($(this).val()==14){
             $(this).parents('.tablerow').find('.return_check').css({"display":"table"});
-            //$(this).parents('.tablerow').find('.payed').prop('checked',false);
 		}else{
             $(this).parents('.tablerow').find('.return_check').hide();
-            //$(this).parents('.tablerow').find('.payed').prop('checked',true);
 		}
 	});
 
@@ -77,31 +75,8 @@ jQuery(document).ready(function($)
 		}
 	});
 	
-	$(document).on("click","#updateTransaction",function(){
-		var total = $("#total_price").val();
-		var amout_total = parseInt(0);
-	    var amout = $('.tablerow .amount_due');
-	    $.each(amout,function(index,value){
-			amout_total += parseInt($(this).val());
-		});
-		if( parseInt(amout_total) == parseInt(total) ){
-			$('#total_price').css({"border":"1px solid #efc80c"});
-    		$('.amount_due').css({"border":"1px solid #efc80c"});
-    		$('.add').hide();
-    		
-		}else if( parseInt(amout_total) > parseInt(total) ) {
-			$('#total_price').css({"border":"1px solid #efc80c"});
-    		$('.amount_due').css({"border":"1px solid #efc80c"});
-    		$('.add').hide();
-			return false;
-		}
-		else{
-			$('#total_price').css({"border":"1px solid #ccc"});
-    		$('.amount_due').css({"border":"1px solid #ccc"});
-			$('.add').show();
-		}
-		
-		$(".pMsR").remove();
+	$(document).on("click","#create-button, #updateTransaction",function(){
+        $(".pMsR").remove();
 	});
 		
     $(document).on("click","a[id^='del-']",function() {
@@ -125,8 +100,8 @@ jQuery(document).ready(function($)
 	       }
 	    });
     });
-	// check caseID
-    $(document).on("blur","#case_id,#client_name",function(){
+	// check caseID SUCCESS FULL
+    $(document).on("blur","#case_id, #client_name",function(){
         var case_id = $("#case_id").val();
         var client_name = $("#client_name").val();
         var data_case_id = $("#case_id").data('case-id');
@@ -160,26 +135,8 @@ jQuery(document).ready(function($)
         }
 	});
 
-    $(document).on("click", "#create-button, #updateTransaction", function(event){
-        event.preventDefault();
-        var amount_due = $(".amount_due");
-        var total_price = parseInt($("#total_price").val());
-        var new_val = 0;
-        $( amount_due ).each(function(index) {
-            var val = parseInt($(this).val());
-            new_val += val;
-        });
-        if(new_val > total_price){
-        	$(".amount_due").css({'border':"1px solid #cc0000"});
-        	$("#total_price").css({'border':"1px solid #cc0000"});
-        	alert("(Amounts due = "+new_val+") > (Gross Sale = "+total_price+")");
-            return false;
-		}else if(new_val < total_price){
-            $(".amount_due").css({'border':"1px solid #cc0000"});
-            $("#total_price").css({'border':"1px solid #cc0000"});
-            alert("(Amounts due = "+new_val+") < (Gross Sale = "+total_price+")");
-            return false;
-		}
+    /*$(document).on("submit", "#transaction", function(){
+
         var case_id = $("#case_id").val();
         var data_case_id = $("#case_id").data('case-id');
         if(data_case_id!='' && data_case_id==case_id && case_id!=''){
@@ -210,7 +167,8 @@ jQuery(document).ready(function($)
 				}
 			});
         }
-	});
+        $(".pMsR").remove();
+	});*/
 	// end check caseID
     $(document).on("focus","#marketing_source_id",function()
     {
@@ -250,6 +208,32 @@ jQuery(document).ready(function($)
                     success: function (response) {
                         if(response=="ok"){
                             this_element.hide("1000");
+                        }
+                    },
+                    error: function(xhr) {
+                        console.log(xhr.responseText);
+                    }
+                });
+        }
+    });
+
+    $(document).on("click",".del_tr_by_search",function(e){
+        e.preventDefault();
+        if (confirm("Are you sure?"))
+        {
+            var id = $(this).data('id');
+            var this_element = $(this).parent().parent();
+            $.ajaxSetup({
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
+            });
+            $.ajax(
+                {
+                    url: "/deleteTransaction",
+                    type: 'POST',
+                    data: {"id": id},
+                    success: function (response) {
+                        if(response=="ok"){
+                            location.reload();
                         }
                     },
                     error: function(xhr) {

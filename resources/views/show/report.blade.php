@@ -76,17 +76,17 @@
                                     <tbody>
                                     @foreach($result_worker as $key => $item)
                                         <tr>
-                                            <td>@if( isset($item->first_name) ) {{$item->first_name}} {{$item->last_name}} @endif</td>
-                                            <td>@if( isset($item->amounts_due) ) ${{number_format($item->amounts_due,2)}} @else $0,00 @endif</td>
-                                            <td>@if( isset($new_bissness[$item->w_id]) ) ${{number_format($new_bissness[$item->w_id],2)}} @else $0,00 @endif</td>
-                                            <td style="text-align: center;">@if( isset($new_deal[$item->w_id]) ) {{$new_deal[$item->w_id]}} @else 0 @endif</td>
+                                            <td>@if( isset($name[$key]) ) {{$name[$key]}} @endif</td>
+                                            <td>@if( isset($item) ) ${{number_format($item,2)}} @else $0,00 @endif</td>
+                                            <td>@if( isset($new_bissness[$key]) ) ${{number_format($new_bissness[$key],2)}} @else $0,00 @endif</td>
+                                            <td style="text-align: center;">@if( isset($new_deal[$key]) ) {{$new_deal[$key]}} @else 0 @endif</td>
                                         </tr>
                                     @endforeach
                                     <tr>
                                         <td><b>Total</b></td>
-                                        <td><b>@if($total_amout[0]->amounts_due>0) ${{number_format($total_amout[0]->amounts_due,2)}} @else $0,00 @endif</b></td>
-                                        <td>@if($new_bissness_total['total_all']>0) ${{number_format($new_bissness_total['total_all'],2)}} @else $0,00 @endif</td>
-                                        <td style="text-align: center;">@if($new_deal['total_new']>0) {{$new_deal['total_new']}} @else 0 @endif</td>
+                                        <td><b>@if(isset($total_amout['total'])) ${{number_format($total_amout['total'],2)}} @else $0,00 @endif</b></td>
+                                        <td>@if(isset($new_bissness_total['total_all'])) ${{number_format($new_bissness_total['total_all'],2)}} @else $0,00 @endif</td>
+                                        <td style="text-align: center;">@if(isset($new_deal['total_new'])) {{$new_deal['total_new']}} @else 0 @endif</td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -98,12 +98,12 @@
                                     @foreach($result_payment_method as $item)
                                         <tr>
                                             <td>{{$item->pmTitle}}</td>
-                                            <td>@if($item->amounts_due>0) ${{number_format($item->amounts_due,2)}} @else $0,00 @endif</td>
+                                            <td>@if(isset($item->amounts_due)) @if($item->pmTitle == "Refund" || $item->pmTitle == "Returned Check") - @endif ${{number_format($item->amounts_due,2)}} @else $0,00 @endif</td>
                                         </tr>
                                     @endforeach
                                     <tr>
                                         <td><b>Total</b></td>
-                                        <td><b>@if($total_amout[0]->amounts_due>0) ${{number_format($total_amout[0]->amounts_due,2)}} @else $0,00 @endif</b></td>
+                                        <td><b>@if(isset($total_amout['total'])) ${{number_format($total_amout['total'],2)}} @else $0,00 @endif</b></td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -115,12 +115,12 @@
                                     @foreach($result_payment_type as $item)
                                         <tr>
                                             <td>{{$item->ptTitle}}</td>
-                                            <td>@if($item->amounts_due>0) ${{number_format($item->amounts_due,2)}} @else $0,00 @endif</td>
+                                            <td>@if($item->amounts_due>0) @if($item->ptTitle == "Refund" || $item->ptTitle == "Returned Check") - @endif ${{number_format($item->amounts_due,2)}} @else $0,00 @endif</td>
                                         </tr>
                                     @endforeach
                                     <tr>
                                         <td><b>Total</b></td>
-                                        <td><b>@if($total_amout[0]->amounts_due>0) ${{number_format($total_amout[0]->amounts_due,2)}} @else $0,00 @endif</b></td>
+                                        <td><b>@if(isset($total_amout['total'])) ${{number_format($total_amout['total'],2)}} @else $0,00 @endif</b></td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -129,15 +129,15 @@
                                         <th>Marketing Source</th>
                                         <th>$ Collected</th>
                                     </tr>
-                                    @foreach($result_marketing as $item)
+                                    @foreach($result_marketing as $key => $item)
                                         <tr>
-                                            <td>{{$item->msTitle}}</td>
-                                            <td>@if($item->amounts_due>0) ${{number_format($item->amounts_due,2)}} @else $0,00 @endif</td>
+                                            <td>@if(isset($key)) {{$key}} @endif</td>
+                                            <td>@if(isset($item)) ${{number_format($item,2)}} @else $0,00 @endif</td>
                                         </tr>
                                     @endforeach
                                     <tr>
                                         <td><b>Total</b></td>
-                                        <td><b>@if($total_amout[0]->amounts_due>0) ${{number_format($total_amout[0]->amounts_due,2)}} @else $0,00 @endif</b></td>
+                                        <td><b>@if(isset($total_amout['total'])) ${{number_format($total_amout['total'],2)}} @else $0,00 @endif</b></td>
                                     </tr>
                                     </tbody>
                                 </table>
